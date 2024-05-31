@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'rpe_table.dart';
+import 'utils.dart';
+import 'enum_definitions.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(const MyApp());
+
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -11,7 +18,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -30,8 +39,9 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'RPE E1RM Calculator'),
     );
   }
 }
@@ -55,71 +65,118 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  late TextEditingController _loadController;
+  late TextEditingController _rpeController;
+  late TextEditingController _repController;
+  final String smallLogo = "images/logoLarge.svg";
+
+
+  @override
+  void initState() {
+    super.initState();
+    _rpeController = TextEditingController();
+    _repController = TextEditingController();
+    _loadController = TextEditingController();
   }
 
   @override
+  void dispose() {
+    _rpeController.dispose();
+    _repController.dispose();
+    _loadController.dispose();
+    super.dispose();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
+        titleSpacing: 30,
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+        backgroundColor: Colors.blue,
         title: Text(widget.title),
+
+
+        leading: SvgPicture.asset(
+          smallLogo,
+          semanticsLabel: 'Genuine.PL Logo',
+          width: 100,
+        ),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Container(
+              width: 800,
+              height: 600,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: TextField(
+                      controller: _loadController,
+                      decoration: InputDecoration(
+                        hintText: "Enter load lifted here: ",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+
+
+                  DropdownMenu(
+                    controller: _repController,
+                    label: const Text('Repetitions'),
+                    width: 200,
+                    dropdownMenuEntries: <DropdownMenuEntry<RepLabel>>[
+                      DropdownMenuEntry(value: RepLabel.oneRep, label: "1"),
+                      DropdownMenuEntry(value: RepLabel.twoReps, label: "2"),
+                      DropdownMenuEntry(value: RepLabel.threeReps, label: "3"),
+                      DropdownMenuEntry(value: RepLabel.fourReps  , label: "4"),
+                      DropdownMenuEntry(value: RepLabel.fiveReps, label: "5"),
+                      DropdownMenuEntry(value: RepLabel.sixReps, label: "6"),
+                      DropdownMenuEntry(value: RepLabel.sevenReps, label: "7"),
+                      DropdownMenuEntry(value: RepLabel.eightReps, label: "8"),
+                      DropdownMenuEntry(value: RepLabel.nineReps, label: "9"),
+                      DropdownMenuEntry(value: RepLabel.tenReps, label: "10"),
+                    ],
+
+
+                  ),
+                  DropdownMenu(
+                    controller: _rpeController,
+                    label: const Text('RPE'),
+                    width: 130,
+                    dropdownMenuEntries: <DropdownMenuEntry<RPELabel>>[
+                      DropdownMenuEntry(value: RPELabel.rpe6, label: "6"),
+                      DropdownMenuEntry(value: RPELabel.rpe65, label: "6.5"),
+                      DropdownMenuEntry(value: RPELabel.rpe7, label: "7"),
+                      DropdownMenuEntry(value: RPELabel.rpe75, label: "7.5"),
+                      DropdownMenuEntry(value: RPELabel.rpe8, label: "8"),
+                      DropdownMenuEntry(value: RPELabel.rpe85, label: "8.5"),
+                      DropdownMenuEntry(value: RPELabel.rpe9, label: "9"),
+                      DropdownMenuEntry(value: RPELabel.rpe95, label: "9.5"),
+                      DropdownMenuEntry(value: RPELabel.rpe10, label: "10"),
+                    ],
+
+
+                  ),
+                ],
+              )
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
