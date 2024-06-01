@@ -70,6 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController _rpeController;
   late TextEditingController _repController;
   final String smallLogo = "images/logoLarge.svg";
+  double load = 0.0;
+  int reps = 0;
+  String rpe = "";
 
 
   @override
@@ -117,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
               width: 800,
-              height: 600,
+              height: 200,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -132,8 +135,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-
-
                   DropdownMenu(
                     controller: _repController,
                     label: const Text('Repetitions'),
@@ -150,8 +151,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       DropdownMenuEntry(value: RepLabel.nineReps, label: "9"),
                       DropdownMenuEntry(value: RepLabel.tenReps, label: "10"),
                     ],
-
-
                   ),
                   DropdownMenu(
                     controller: _rpeController,
@@ -168,12 +167,55 @@ class _MyHomePageState extends State<MyHomePage> {
                       DropdownMenuEntry(value: RPELabel.rpe95, label: "9.5"),
                       DropdownMenuEntry(value: RPELabel.rpe10, label: "10"),
                     ],
-
-
                   ),
                 ],
               )
             ),
+            ElevatedButton(
+              child: Text("Calculate",
+              style: TextStyle(
+                fontSize: 20,
+              )),
+              onPressed: (){
+                setState(() {
+                  load = double.parse(_loadController.value.text);
+                  reps = int.parse(_repController.value.text);
+                  rpe = _rpeController.value.text;
+                });
+
+              },
+
+              ),
+            Padding(
+                padding: EdgeInsets.all(16.0), // Adds padding of 16.0 on all sides
+                child: Container(
+                    width: 800,
+                    height: 400,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Your estimated 1RM is: ${calculateE1RM(load, reps, rpe)}",
+                              style: TextStyle(
+                                fontSize: 25,
+                              )),
+                          Table(
+
+                              children: [
+                                TableRow(children: [
+                                  Text('RPE:'),
+                                  Text('Load:')
+                                ]),
+                                TableRow(children: [
+                                  Text('10'),
+                                  Text('Placeholder')
+                                ])
+                              ]
+                          )
+                        ]
+                    )
+                )
+            )
+
           ],
         ),
       ),// This trailing comma makes auto-formatting nicer for build methods.
