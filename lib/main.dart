@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double load = 0.0;
   int reps = 0;
   String rpe = "";
+  double e1rm = 0.0;
 
 
   @override
@@ -181,6 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   load = double.parse(_loadController.value.text);
                   reps = int.parse(_repController.value.text);
                   rpe = _rpeController.value.text;
+                 e1rm = calculateE1RM(load, reps, rpe);
                 });
 
               },
@@ -194,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text("Your estimated 1RM is: ${calculateE1RM(load, reps, rpe)}",
+                          Text("Your estimated 1 rep maximum is: $e1rm",
                               style: TextStyle(
                                 fontSize: 25,
                               )),
